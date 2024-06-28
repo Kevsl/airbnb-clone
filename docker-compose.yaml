@@ -1,27 +1,25 @@
 version: '3.8'
 services:
-  hellbnb:
-    image: mysql:8
+  hellbnbb:
+    image: postgres:13
     ports:
-      - 3306:3306
+      - 5432:5432
     environment:
-      MYSQL_ROOT_PASSWORD: pass
-      MYSQL_DATABASE: ecom
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      POSTGRES_USER: kev
+      POSTGRES_PASSWORD: lekev
+      POSTGRES_DB: kevdb
     networks:
-      - HBNB
+      - HLBNB
   test-db:
-    image: mysql:8
+    image: postgres:13
     ports:
-      - 3308:3306
+      - 5434:5434
     environment:
-      MYSQL_ROOT_PASSWORD: testpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpass
+      POSTGRES_USER: uDr4KjGcpEm6N5F3BqhxAT
+      POSTGRES_PASSWORD: 12xt6h4fWf4QL9WiP5syZ887S8Si54giDizdB8L685aBiBkBVaW87MS3bWc22ba3L9YT3
+      POSTGRES_DB: cW76664NDPkmc
     networks:
-      - HBNB
+      - HLBNB
 networks:
-  HBNB:
+  HLBNB:
     external: true
