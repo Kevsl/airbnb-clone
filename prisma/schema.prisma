@@ -15,14 +15,12 @@ model Booking{
   reservationDate DateTime
   quantity        Int
   total           Float
-  categoryId      String
-
+  rentalId        String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  category    Category   @relation(fields: [categoryId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
-
+  rental      Rental    @relation(fields: [rentalId], references: [id])
 }
 
 model Category{
@@ -31,7 +29,8 @@ model Category{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  booking Booking[]
+  rental Rental[]
+  
 }
 
 model Rental{
@@ -43,9 +42,11 @@ model Rental{
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId String
+  categoryId String
 
   user  User @relation(fields: [userId], references: [id])
-  
+  category Category[]
+  booking Booking[]
   
 }
 

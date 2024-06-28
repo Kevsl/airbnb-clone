@@ -21,12 +21,6 @@ export class UserService {
             reservationDate: true,
             quantity: true,
             total: true,
-            category: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
           },
         },
       },

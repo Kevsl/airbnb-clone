@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { InsertRentalDto } from './rental/insert.rental.dto';
-import { UpdateRentalDto } from './rental/update.rental.dto';
+import { InsertRentalDto } from './dto/insert.rental.dto';
+import { UpdateRentalDto } from './dto/update.rental.dto';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -30,6 +30,7 @@ export class RentalService {
         adress: dto.adress,
         userId: user.id,
         price: dto.price,
+        categoryId: dto.categoryId,
       },
     });
   }

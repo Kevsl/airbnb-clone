@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsNumber, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  Min,
+  Max,
+  IsUUID,
+} from 'class-validator';
 export class UpdateRentalDto {
   @IsString()
   @IsNotEmpty()
@@ -7,6 +14,10 @@ export class UpdateRentalDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  categoryId: string;
 
   @IsNumber()
   @IsNotEmpty()

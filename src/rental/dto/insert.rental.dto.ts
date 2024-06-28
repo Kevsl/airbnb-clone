@@ -5,6 +5,7 @@ import {
   Min,
   Max,
   IsStrongPassword,
+  IsUUID,
 } from 'class-validator';
 export class InsertRentalDto {
   @IsString()
@@ -15,6 +16,10 @@ export class InsertRentalDto {
   @IsNotEmpty()
   @IsStrongPassword()
   description: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  categoryId: string;
 
   @IsNumber()
   @IsNotEmpty()
