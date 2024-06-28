@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Booking{
+  id              String      @id @default(uuid())
+  userId          String
+  reservationDate DateTime
+  quantity        Int
+  total           Float
+  categoryId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category    Category   @relation(fields: [categoryId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+
+}
+
+model Category{
+  id        String      @id @default(uuid())
+  name      String      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  booking Booking[]
+}
+
+model Rental{
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  adress      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId String
+
+  user  User @relation(fields: [userId], references: [id])
+  
+  
+}
+
+model User {
+  id        String      @id @default(uuid())
+  email     String      @unique
+  password  String     
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  booking Booking[]
+  rental Rental[]
+}
+
+

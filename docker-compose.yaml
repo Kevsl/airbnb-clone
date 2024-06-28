@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  hellbnb:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: ecom
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    networks:
+      - HBNB
+  test-db:
+    image: mysql:8
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: testpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+    networks:
+      - HBNB
+networks:
+  HBNB:
+    external: true
