@@ -3,15 +3,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { InsertRentalDto } from './dto/insert.rental.dto';
 import { UpdateRentalDto } from './dto/update.rental.dto';
 import { User } from '@prisma/client';
+import { RentalGateway } from './rental.gateway';
 
 @Injectable()
 export class RentalService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private rentalGateway: RentalGateway,
+  ) {}
 
   async getAllRentals() {
     return this.prisma.rental.findMany({
       orderBy: {
-        name: 'asc',
+        name: 'desc',
       },
       select: {
         name: true,
@@ -22,8 +26,7 @@ export class RentalService {
   }
 
   async createRental(dto: InsertRentalDto, user: User) {
-    console.log(user);
-    return this.prisma.rental.create({
+    const newRental = await this.prisma.rental.create({
       data: {
         name: dto.name,
         description: dto.description,
@@ -33,6 +36,9 @@ export class RentalService {
         categoryId: dto.categoryId,
       },
     });
+    const rentals = await this.getAllRentals();
+    this.rentalGateway.server.emit('newRental', rentals);
+    return newRental;
   }
   async updateRental(id: string, dto: UpdateRentalDto) {
     const existingRental = await this.prisma.rental.findUnique({
@@ -44,7 +50,7 @@ export class RentalService {
     if (!existingRental || !existingRental) {
       throw new ForbiddenException('Unexisting id');
     }
-    return this.prisma.rental.update({
+    const updatedRental = await this.prisma.rental.update({
       where: {
         id: id,
       },
@@ -52,6 +58,9 @@ export class RentalService {
         ...dto,
       },
     });
+    const rentals = await this.getAllRentals();
+    this.rentalGateway.server.emit('newRental', rentals);
+    return updatedRental;
   }
 
   async deleteRental(id: string) {
@@ -63,11 +72,14 @@ export class RentalService {
     if (!existingRental || !existingRental.id) {
       throw new ForbiddenException("Id doesn't exist");
     } else {
-      return this.prisma.rental.delete({
+      await this.prisma.rental.delete({
         where: {
           id: id,
         },
       });
+      const rentals = await this.getAllRentals();
+      this.rentalGateway.server.emit('newRental', rentals);
+      return 'deleted';
     }
   }
 }
