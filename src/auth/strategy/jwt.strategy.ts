@@ -23,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       },
       select: {
         email: true,
+        name: true,
         id: true,
       },
     });

@@ -4,12 +4,14 @@ import { InsertRentalDto } from './dto/insert.rental.dto';
 import { UpdateRentalDto } from './dto/update.rental.dto';
 import { User } from '@prisma/client';
 import { RentalGateway } from './rental.gateway';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class RentalService {
   constructor(
     private prisma: PrismaService,
     private rentalGateway: RentalGateway,
+    private emailService: EmailService,
   ) {}
 
   async getAllRentals() {
@@ -36,8 +38,8 @@ export class RentalService {
         categoryId: dto.categoryId,
       },
     });
-    const rentals = await this.getAllRentals();
-    this.rentalGateway.server.emit('newRental', rentals);
+
+    await this.emailService.sendUserListingHasBeenCreated(user, newRental);
     return newRental;
   }
   async updateRental(id: string, dto: UpdateRentalDto) {

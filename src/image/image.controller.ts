@@ -3,22 +3,19 @@ import {
   UseInterceptors,
   UploadedFile,
   Post,
-  Param,
   Get,
+  Param,
   Res,
 } from '@nestjs/common';
-import { ImageService } from './image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import { createReadStream, existsSync } from 'fs';
 import { Response } from 'express';
-import { join } from 'path';
-import { existsSync, createReadStream } from 'fs';
+
 @Controller('image')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
-
-  @Post('/upload/:route')
+  @Post('/upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -32,16 +29,13 @@ export class ImageController {
       }),
     }),
   )
-  uploadFile(
-    @UploadedFile() file: Express.Multer.File,
-    @Param('route') route: string,
-  ) {
-    console.log(route, file);
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return file.filename;
   }
 
-  @Get('/view/:filename')
-  viewImage(@Param('filename') filename: string, @Res() res: Response) {
-    const filePath = join(__dirname, '..', '..', 'uploads', filename);
+  @Get('/view/:fileName')
+  GetImage(@Param('fileName') fileName: string, @Res() res: Response) {
+    const filePath = join(__dirname, '..', '..', 'uploads', fileName);
 
     if (existsSync(filePath)) {
       const fileStream = createReadStream(filePath);
