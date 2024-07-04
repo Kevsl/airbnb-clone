@@ -76,7 +76,7 @@ export class BookingService {
   }
 
   async deleteBooking(id: string, user: User) {
-    const existingBooking = await this.prisma.booking.findUniqueOrThrow({
+    const existingBooking = await this.prisma.booking.findUnique({
       where: {
         id: id,
       },

@@ -3,14 +3,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { InsertRentalDto } from './dto/insert.rental.dto';
 import { UpdateRentalDto } from './dto/update.rental.dto';
 import { User } from '@prisma/client';
-import { RentalGateway } from './rental.gateway';
 import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class RentalService {
   constructor(
     private prisma: PrismaService,
-    private rentalGateway: RentalGateway,
     private emailService: EmailService,
   ) {}
 
@@ -60,8 +58,7 @@ export class RentalService {
         ...dto,
       },
     });
-    const rentals = await this.getAllRentals();
-    this.rentalGateway.server.emit('newRental', rentals);
+
     return updatedRental;
   }
 
@@ -79,8 +76,6 @@ export class RentalService {
           id: id,
         },
       });
-      const rentals = await this.getAllRentals();
-      this.rentalGateway.server.emit('newRental', rentals);
       return 'deleted';
     }
   }
